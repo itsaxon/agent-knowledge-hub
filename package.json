@@ -1,0 +1,37 @@
+{
+  "name": "ai-knowledge-hub",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "next build && node scripts/finalize-dist.mjs",
+    "start": "next start",
+    "lint": "next lint",
+    "build:entries": "node scripts/build-entries.mjs",
+    "predev": "node scripts/build-entries.mjs",
+    "prebuild": "node scripts/build-entries.mjs",
+    "deploy": "python deploy.py"
+  },
+  "dependencies": {
+    "clsx": "2.1.1",
+    "framer-motion": "11.18.2",
+    "geist": "1.3.1",
+    "lucide-react": "0.469.0",
+    "next": "^16.2.12",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "22.10.7",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3",
+    "eslint": "9.18.0",
+    "eslint-config-next": "^16.2.12",
+    "postcss": "8.5.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "5.7.3"
+  }
+}

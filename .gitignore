@@ -1,0 +1,41 @@
+# dependencies
+node_modules/
+
+# next.js build output
+.next/
+out/
+dist/
+
+# generated data (rebuilt via `npm run build:entries`)
+lib/entries.generated.json
+
+# typescript build cache
+tsconfig.tsbuildinfo
+
+# environment files
+.env
+.env*.local
+
+# logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.workbuddy
+
+# deploy script (contains server credentials) and temp artifact
+deploy.sh
+knowledge-hub-out.tar.gz
+
+# python cache
+__pycache__/
+
+

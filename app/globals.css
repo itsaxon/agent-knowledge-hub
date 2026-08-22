@@ -1,0 +1,1069 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Global font scale — 137.5% of browser default (125% × 1.1, bumped +10%
+   per design request). Implemented via the rem root instead of `zoom`: CSS
+   zoom on <html> breaks hit-testing coordinates in Chromium and
+   viewport/scroll calculations in iOS Safari (fixed positioning, toolbar
+   collapse, dvh sizing all misbehave). Components sized in px keep their
+   design dimensions; rem-based text and spacing scale.
+   ========================================================================== */
+html {
+  font-size: 137.5%;
+}
+
+/* Whole-app visual zoom — reproduces the user's preferred browser-level
+   110% zoom. Applied to the app wrapper (<main>), never to <html>: html-
+   level zoom breaks hit-testing coordinates in Chromium and viewport math
+   in iOS Safari, while wrapper-level zoom leaves the real viewport, media
+   queries and position:fixed behaviour untouched. px-sized components that
+   ignore the rem root scale here; rem-based text compounds with it. */
+.hub-app-root {
+  zoom: 1.1;
+}
+
+/* ==========================================================================
+   Global scrollbar — thin track + blue thumb (matches theme --chart color)
+   ========================================================================== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--chart) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--chart);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--chart);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ==========================================================================
+   AI 知识库 — Design Tokens
+   21th Style · Light/Dark · Monochrome · Geist Mono · 0 radius · offset shadow
+   Brand prefix: hub · default theme: light
+   ========================================================================== */
+
+:root {
+  /* --- Light theme · Brand semantic aliases --- */
+  --hub-background: oklch(0.8328 0.0044 197.0717);
+  --hub-foreground: oklch(0.1776 0 0);
+  --hub-card: oklch(0.8868 0.0022 197.1175);
+  --hub-card-foreground: oklch(0.1776 0 0);
+  --hub-popover: oklch(0.8868 0.0022 197.1175);
+  --hub-popover-foreground: oklch(0.1776 0 0);
+  --hub-primary: oklch(0.1776 0 0);
+  --hub-primary-foreground: oklch(1 0 0);
+  --hub-muted: oklch(0.8868 0.0022 197.1175);
+  --hub-muted-foreground: oklch(0.6268 0 0);
+  --hub-border: oklch(1 0 0);
+  --hub-input: oklch(1 0 0);
+  --hub-ring: oklch(0 0 0);
+  --hub-destructive: oklch(0.5787 0.2005 26.1521);
+  --hub-destructive-foreground: oklch(1 0 0);
+
+  /* --- Radius scale (21th: 0 everywhere) --- */
+  --hub-radius-sm: 0px;
+  --hub-radius-md: 0px;
+  --hub-radius-lg: 0px;
+  --hub-radius-pill: 0px;
+
+  /* --- Core palette (light · monochrome) --- */
+  --bg: oklch(0.8328 0.0044 197.0717);
+  --surface: oklch(0.8868 0.0022 197.1175);
+  --surface-2: oklch(0.8868 0.0022 197.1175);
+  --ink: oklch(0.1776 0 0);
+  --ink-2: oklch(0.42 0 0);
+  --ink-3: oklch(0.62 0 0);
+  --line: oklch(1 0 0);
+  --brand: oklch(0.1776 0 0);
+  --brand-ink: oklch(1 0 0);
+  --brand-soft: oklch(0.8868 0.0022 197.1175);
+
+  /* --- Chart / data accent --- */
+  --chart: oklch(0.5012 0.2803 263.8733);
+
+  /* --- Semantic state colors (light) --- */
+  --state-success: oklch(0.55 0.16 163);
+  --state-warning: oklch(0.72 0.17 84);
+  --state-error: oklch(0.5787 0.2005 26.1521);
+  --state-info: oklch(0.5012 0.2803 263.8733);
+
+  /* --- Spacing (4px base grid) --- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 80px;
+
+  /* --- Shadow (21th offset shadow: 2px 2px 0 0 black) --- */
+  --shadow-1: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-2: 2px 2px 0px 0px rgba(0, 0, 0, 1), 2px 2px 4px -1px rgba(0, 0, 0, 1);
+
+  /* --- Typography (21th: Geist Mono, -0.05em tracking) --- */
+  --font-sans: var(--font-geist-mono), ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --font-mono: var(--font-geist-mono), ui-monospace, "JetBrains Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --tracking: -0.05em;
+}
+
+/* --- Dark theme overrides --- */
+.dark {
+  --hub-background: oklch(0.1448 0 0);
+  --hub-foreground: oklch(1 0 0);
+  --hub-card: oklch(0.2178 0 0);
+  --hub-card-foreground: oklch(1 0 0);
+  --hub-popover: oklch(0.2178 0 0);
+  --hub-popover-foreground: oklch(1 0 0);
+  --hub-primary: oklch(1 0 0);
+  --hub-primary-foreground: oklch(0 0 0);
+  --hub-muted: oklch(0.3211 0 0);
+  --hub-muted-foreground: oklch(0.7380 0 0);
+  --hub-border: oklch(0.3211 0 0);
+  --hub-input: oklch(0.2178 0 0);
+  --hub-ring: oklch(0.3211 0 0);
+  --hub-destructive: oklch(0.6368 0.2078 25.3313);
+  --hub-destructive-foreground: oklch(1 0 0);
+
+  --bg: oklch(0.1448 0 0);
+  --surface: oklch(0.2178 0 0);
+  --surface-2: oklch(0.3211 0 0);
+  --ink: oklch(1 0 0);
+  --ink-2: oklch(0.7380 0 0);
+  --ink-3: oklch(0.5320 0 0);
+  --line: oklch(0.3211 0 0);
+  --brand: oklch(1 0 0);
+  --brand-ink: oklch(0 0 0);
+  --brand-soft: oklch(0.3211 0 0);
+
+  --chart: oklch(0.7137 0.1434 254.6240);
+
+  --state-success: oklch(0.7729 0.1535 163.2231);
+  --state-warning: oklch(0.8369 0.1644 84.4286);
+  --state-error: oklch(0.6368 0.2078 25.3313);
+  --state-info: oklch(0.7137 0.1434 254.6240);
+
+  --shadow-1: 2px 2px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-2: 2px 2px 0px 0px rgba(0, 0, 0, 1), 2px 2px 4px -1px rgba(0, 0, 0, 1);
+}
+
+/* Tailwind v4 theme mapping */
+@theme inline {
+  --color-background: var(--hub-background);
+  --color-foreground: var(--hub-foreground);
+  --color-card: var(--hub-card);
+  --color-card-foreground: var(--hub-card-foreground);
+  --color-popover: var(--hub-popover);
+  --color-popover-foreground: var(--hub-popover-foreground);
+  --color-primary: var(--hub-primary);
+  --color-primary-foreground: var(--hub-primary-foreground);
+  --color-muted: var(--hub-muted);
+  --color-muted-foreground: var(--hub-muted-foreground);
+  --color-destructive: var(--hub-destructive);
+  --color-destructive-foreground: var(--hub-destructive-foreground);
+  --color-border: var(--hub-border);
+  --color-input: var(--hub-input);
+  --color-ring: var(--hub-ring);
+  --radius-sm: var(--hub-radius-sm);
+  --radius-md: var(--hub-radius-md);
+  --radius-lg: var(--hub-radius-lg);
+  --font-sans: var(--font-geist-mono), ui-monospace, "JetBrains Mono", monospace;
+  --font-mono: var(--font-geist-mono), ui-monospace, "JetBrains Mono", monospace;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    /* Prevent iOS rubber-band scroll bleed-through when a modal/drawer is
+       the only thing that should scroll. */
+    overscroll-behavior: none;
+  }
+  body {
+    background: var(--hub-background);
+    color: var(--hub-foreground);
+    font-family: var(--font-sans);
+    letter-spacing: var(--tracking);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* `dvh` fixes the iOS Safari 100vh bug where the address bar overlaps
+       content. The `100vh` fallback covers older browsers. */
+    min-height: 100vh;
+    min-height: 100dvh;
+    /* Kill the grey iOS tap-highlight flash on interactive elements. */
+    -webkit-tap-highlight-color: transparent;
+    /* Allow text selection but avoid the iOS callout menu on long-press of
+       non-text UI chrome. */
+    -webkit-touch-callout: none;
+    /* Respect safe-area insets at the page level so content never sits under
+       the home indicator or notch. */
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  ::selection {
+    background: var(--brand);
+    color: var(--brand-ink);
+  }
+  button {
+    cursor: pointer;
+  }
+  /* iOS Safari auto-zooms <input> on focus when font-size < 16px. Pin inputs
+     to 16px so the viewport stays stable while typing on iPhone. */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+  @media (min-width: 768px) {
+    input,
+    textarea,
+    select {
+      font-size: inherit;
+    }
+  }
+}
+
+/* ==========================================================================
+   Component styles — 21th
+   ========================================================================== */
+
+.hub-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Responsive horizontal padding that also clears the iOS safe-area insets
+   (notch / Dynamic Island in landscape). `max()` guarantees the design
+   padding wins when the inset is smaller. */
+.hub-pad-x {
+  padding-left: max(24px, env(safe-area-inset-left));
+  padding-right: max(24px, env(safe-area-inset-right));
+}
+
+.hub-header-bar {
+  /* Inner bar height is set on its child; the header itself grows by the
+     top safe-area inset so the bar background fills the status-bar / notch
+     region on iOS instead of leaving a gap. */
+  padding-top: env(safe-area-inset-top);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Hide non-essential chrome (⌘K button, "Submit" label) on phones to keep
+   the header from overflowing on a 390px-wide iPhone. The icons stay so the
+   actions remain reachable. Shown again at ≥768px (tablet / desktop). */
+.hub-compact-hide-sm {
+  display: none;
+}
+@media (min-width: 768px) {
+  .hub-compact-hide-sm {
+    display: inline-flex;
+  }
+}
+/* The submit button label is a text node inside a flex button; toggle it
+   with the same breakpoint but as inline (it's a <span>). */
+button .hub-compact-hide-sm {
+  display: none;
+}
+@media (min-width: 768px) {
+  button .hub-compact-hide-sm {
+    display: inline;
+  }
+}
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  /* Offset sticky header (64px) when scrolling to this anchor via
+     scrollIntoView or #card-grid hash navigation. */
+  scroll-margin-top: 88px;
+}
+
+.hub-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.hub-left-rail {
+  position: sticky;
+  top: 80px;
+}
+
+@media (max-width: 1023px) {
+  .hub-layout {
+    grid-template-columns: 1fr;
+  }
+  .hub-left-rail {
+    display: none;
+  }
+  /* Grid items default to min-width:auto, so an unbreakable long token in a
+     card can blow the single-column track (and the whole page) wider than
+     the viewport — 1fr must be allowed to shrink to 0. */
+  .hub-main {
+    min-width: 0;
+  }
+  .hub-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .hub-pad-x {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  .hub-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .hub-card {
+    padding: 18px;
+  }
+  .hub-footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+}
+
+/* ==========================================================================
+   Mobile category chip rail
+   The desktop sidebar (`.hub-left-rail`) is hidden below 1024px; this
+   horizontally-scrollable chip bar replaces it so mobile users can still
+   filter by category. Only shown below 1024px.
+   ========================================================================== */
+.hub-mobile-cats {
+  display: none;
+}
+@media (max-width: 1023px) {
+  .hub-mobile-cats {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px max(16px, env(safe-area-inset-left)) 16px;
+    margin-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .hub-mobile-cats::-webkit-scrollbar {
+    display: none;
+  }
+}
+.hub-mobile-cat {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  white-space: nowrap;
+  transition: transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 120ms ease, box-shadow 120ms ease;
+}
+.hub-mobile-cat.is-active {
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: var(--brand);
+}
+.hub-mobile-cat-count {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* Desktop hover effects (translate lifts) only apply on real pointers.
+   On touch devices `:hover` sticks after tap, leaving elements visually
+   "pressed" — so the transforms are gated behind `(hover: hover)`. */
+@media (hover: hover) {
+  .hub-theme-toggle:hover {
+    transform: translate(-1px, -1px);
+    border-color: var(--ink);
+    box-shadow: var(--shadow-2);
+  }
+  .hub-ghost-btn:hover {
+    transform: translate(-1px, -1px);
+    border-color: var(--ink);
+    box-shadow: var(--shadow-2);
+  }
+  .hub-card:hover {
+    transform: translate(-1px, -1px);
+    border-color: var(--ink);
+    box-shadow: var(--shadow-2);
+  }
+  .hub-card:hover .hub-card-meta-icon {
+    transform: translateX(2px);
+  }
+  .hub-cat-link:hover {
+    color: var(--ink);
+    background: var(--surface);
+    border-left-color: var(--surface-2);
+  }
+  .hub-foot-link:hover {
+    color: var(--ink);
+  }
+  .hub-toc-item:hover {
+    color: var(--ink);
+  }
+  .hub-mobile-cat:hover {
+    transform: translate(-1px, -1px);
+    border-color: var(--ink);
+    box-shadow: var(--shadow-2);
+  }
+}
+
+/* Eyebrow label */
+.hub-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  display: inline-block;
+}
+
+.hub-icon-btn {
+  transition: color 120ms ease;
+}
+
+/* Theme toggle */
+.hub-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  cursor: pointer;
+  color: var(--ink);
+  transition: transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 120ms ease, box-shadow 120ms ease;
+}
+.hub-theme-toggle:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+/* Ghost / submit button */
+.hub-ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+  gap: 6px;
+  transition: transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 120ms ease, box-shadow 120ms ease;
+}
+.hub-ghost-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+/* Search input. Font-size is 16px on phones so iOS Safari doesn't auto-zoom
+   the viewport on focus; drops to the design 14px on ≥768px. */
+.hub-search {
+  font-size: 16px;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+@media (min-width: 768px) {
+  .hub-search {
+    font-size: 14px;
+  }
+}
+.hub-search:focus {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ink) 22%, transparent), var(--shadow-1);
+}
+.hub-search::placeholder {
+  color: var(--ink-3);
+}
+
+/* kbd keycap */
+.hub-kbd {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 0;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--ink-3);
+}
+
+/* Stat pills */
+.hub-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--ink-2);
+}
+.hub-stat-num {
+  color: var(--chart);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* Rail section label */
+.hub-rail-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+  padding-left: 12px;
+}
+
+/* Category links */
+.hub-cat-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 0;
+  color: var(--ink-2);
+  font-size: 14px;
+  border-left: 2px solid transparent;
+  transition: color 120ms ease, background 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+.hub-cat-link.is-active {
+  color: var(--brand-ink);
+  background: var(--brand);
+  border-left: 2px solid var(--brand);
+  box-shadow: var(--shadow-1);
+}
+.hub-cat-count {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.hub-cat-link.is-active .hub-cat-count {
+  color: var(--brand-ink);
+  opacity: 0.7;
+}
+
+/* Tabs */
+.hub-tab {
+  padding: 10px 4px;
+  font-size: 14px;
+  color: var(--ink-2);
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.hub-tab:hover {
+  color: var(--ink);
+}
+.hub-tab.is-active {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+/* Card */
+.hub-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  padding: var(--s-5);
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 120ms ease, box-shadow 120ms ease;
+}
+.hub-card-meta-icon {
+  transition: transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Tag */
+.hub-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 0;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+  display: inline-block;
+}
+
+/* Status dot */
+.hub-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.hub-card-title {
+  font-family: var(--font-sans);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+  letter-spacing: var(--tracking);
+  /* News headline titles ("商业科技早报：…") can run long — clamp to two
+     lines so card heights stay uniform across the grid. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: break-word;
+}
+.hub-card-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  letter-spacing: var(--tracking);
+  /* Long slash/paren tokens (e.g. "(skip/info_only/...)") have no natural
+     break points; `anywhere` lets them wrap instead of widening the card. */
+  overflow-wrap: anywhere;
+}
+.hub-card-meta-row {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.hub-foot-link {
+  transition: color 120ms ease;
+}
+
+/* No scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Empty state */
+.hub-empty {
+  border: 1px dashed var(--line);
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+/* Markdown content overflow protection. Long URLs / unbreakable token runs in
+   news digests would otherwise blow past the drawer width on mobile and cause
+   horizontal scroll. `overflow-wrap: anywhere` breaks at any character when
+   needed; `pre` and `table` keep their own horizontal scroll. */
+.hub-md {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.hub-md pre,
+.hub-md table {
+  /* allow code blocks / tables to scroll horizontally without forcing the
+     whole page to scroll */
+  max-width: 100%;
+}
+.hub-md img {
+  max-width: 100%;
+  height: auto;
+}
+.hub-md a {
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+/* ==========================================================================
+   Fullscreen reader — content column + right-hand table of contents
+   ========================================================================== */
+
+.hub-reader-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 264px;
+  height: 100%;
+}
+
+.hub-reader-main {
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.hub-reader-toc {
+  border-left: 1px solid var(--line);
+  background: var(--surface);
+  overflow-y: auto;
+  padding: 24px 16px 48px;
+}
+
+.hub-reader-resizer {
+  cursor: col-resize;
+  background: var(--line);
+  transition: background 0.15s;
+}
+
+/* ==========================================================================
+   Mobile flow-reader mode (iOS Safari fix)
+   On phones the detail drawer renders in normal document flow instead of a
+   fixed overlay with internal scrolling. Safari only collapses its bottom
+   toolbar in response to *document* scroll — an inner overflow container
+   inside a fixed overlay leaves the toolbar expanded for the entire reading
+   session. While this mode is active the regular page is hidden and the
+   reader becomes the only scrollable content, so swiping down collapses the
+   Safari chrome for distraction-free reading.
+   ========================================================================== */
+.hub-flow-overlay {
+  position: relative;
+  z-index: 100;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--surface);
+}
+html.hub-flow-reader .hub-page-root {
+  display: none;
+}
+html.hub-flow-reader .hub-reader-layout {
+  display: block;
+  height: auto;
+}
+html.hub-flow-reader .hub-reader-main {
+  overflow: visible;
+  height: auto;
+}
+/* Touch has no hover — the dot-TOC rail is useless in flow mode. */
+html.hub-flow-reader .hub-news-toc {
+  display: none;
+}
+.hub-reader-resizer:hover,
+.hub-reader-resizer:active {
+  background: var(--chart);
+}
+
+@media (max-width: 900px) {
+  .hub-reader-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .hub-reader-toc,
+  .hub-reader-resizer {
+    display: none;
+  }
+}
+
+/* TOC entry */
+.hub-toc-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: var(--tracking);
+  color: var(--ink-3);
+  padding: 6px 12px;
+  border: none;
+  border-left: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+.hub-toc-item:hover {
+  color: var(--ink);
+}
+.hub-toc-item.is-active {
+  color: var(--ink);
+  border-left-color: var(--ink);
+  background: var(--surface-2);
+}
+
+/* ===== News 早报速览 (Quick Overview) ===== */
+.hub-news-overview {
+  margin: 0 0 24px;
+  padding: 16px 20px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.hub-news-overview-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: var(--tracking);
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.hub-news-overview-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hub-news-overview-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  transition: background 120ms ease, color 120ms ease;
+}
+.hub-news-overview-item:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+.hub-news-overview-num {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-3);
+  min-width: 20px;
+}
+.hub-news-overview-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== News floating back-to-list button (fullscreen) ===== */
+/* Appears only after the reader scrolls into the article body, so it does
+   not clutter the top of the page where the header close button lives. */
+.hub-news-back {
+  position: fixed;
+  left: 20px;
+  bottom: 28px;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-2);
+  box-shadow: var(--shadow-2);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.15s ease,
+    border-color 0.15s ease, background 0.15s ease;
+}
+.hub-news-back.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.hub-news-back:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--surface-2);
+}
+@media (max-width: 900px) {
+  .hub-news-back {
+    left: 14px;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ===== News dot-based TOC (fullscreen) ===== */
+.hub-news-toc {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  border-left: 1px solid var(--line);
+}
+.hub-news-toc-dots {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: visible;
+  scrollbar-width: none;
+  padding: 20px 0;
+}
+.hub-news-toc-dots::-webkit-scrollbar {
+  display: none;
+}
+.hub-news-dot {
+  width: 3px;
+  height: 16px;
+  border: none;
+  border-radius: 2px;
+  background: var(--line);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 150ms ease, height 150ms ease, width 150ms ease;
+}
+.hub-news-dot:hover {
+  background: var(--ink-3);
+  height: 22px;
+}
+.hub-news-dot.is-active {
+  background: var(--chart);
+  height: 22px;
+}
+.hub-news-toc-panel {
+  position: absolute;
+  /* Anchor the panel's right edge to just inside the reading column (a few
+     pixels left of the body text's right edge) instead of flush against the
+     TOC dots. This way the expanded panel overlaps only a sliver of the body
+     rather than covering a wide swath of it. `right: 100%` puts the panel's
+     right edge at the TOC's left border; pulling it rightward with a negative
+     margin repositions it over the body's right padding zone. */
+  right: 100%;
+  margin-right: -12px;
+  top: 0;
+  bottom: 0;
+  /* Size to the longest heading so no title is truncated by default.
+     Capped so an extremely long heading can't push the panel across the
+     whole viewport. */
+  width: max-content;
+  min-width: 220px;
+  max-width: 420px;
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+  padding: 16px 16px 48px;
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.06);
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity 200ms ease, transform 200ms ease;
+  pointer-events: none;
+}
+.hub-news-toc-panel.is-open,
+.hub-news-toc:hover .hub-news-toc-panel {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+/* Panel header: label + pin button. */
+.hub-news-toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 0 12px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.hub-news-toc-header .hub-rail-label {
+  margin-bottom: 0;
+  padding-left: 0;
+}
+.hub-news-toc-pin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+.hub-news-toc-pin:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.hub-news-toc-panel.is-pinned .hub-news-toc-pin {
+  color: var(--ink);
+  background: var(--brand-soft);
+  border-color: var(--ink);
+}
+
+@media (max-width: 900px) {
+  .hub-news-toc,
+  .hub-news-toc-panel {
+    display: none;
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+  .hub-card:hover,
+  .hub-ghost-btn:hover,
+  .hub-theme-toggle:hover {
+    transform: none;
+  }
+  .hub-card:hover .hub-card-meta-icon {
+    transform: none;
+  }
+}
